@@ -1,0 +1,26 @@
+
+.backdrop {
+padding: 3%;
+}
+
+.alert-box {
+    color: #c74c26;
+}
+
+
+
+btn {
+    color: rgb(94, 8, 8);
+}
+
+
+
+
+btn:hover {
+    color: #c74c26;
+}
+
+
+.alert-box-action {
+    text-align: right;
+}

@@ -1,0 +1,74 @@
+<div style="height: 95vh;">
+
+  <div class="wrapper fadeInDown">
+    <div id="formContent">
+      <!-- Tabs Titles -->
+        <div *ngIf="isLoading" style="text-align: center;">
+            <app-loading-spinner></app-loading-spinner>
+        </div>
+
+      <!-- Icon -->
+      <div *ngIf="!isLoading" class="fadeIn first" style="margin-bottom: 4%;">
+        <mat-icon matPrefix>people</mat-icon>
+        <br>
+        <br>
+        <br>
+        <p style="font-weight: 900 ;">To continue, log in to SoundSpot <i class="fa fa-headphones"></i></p>
+        <br>
+        <button class="google btn"><i class="fa fa-google fa-fw">
+        </i> Login with Google+</button>
+        <br>
+        <button class="fb btn">
+          <i class="fa fa-facebook fa-fw"></i> Login with Facebook
+        </button>
+        <br>
+        <br>
+        <span> ------------------------
+          <span style="font-weight: 900;"> OR </span>
+                 ------------------------
+        </span>
+      </div>
+
+
+      <!-- Login Form -->
+
+
+        <form #form="ngForm" [formGroup]="authForm"(ngSubmit)="onSubmit()" *ngIf="!isLoading">
+
+          <div class="from-group">
+                <mat-form-field  appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input matInput placeholder="example@example.com" type="email" formControlName="email" id="email" required email>
+                </mat-form-field>
+            </div>
+            <div class="from-group">
+              <mat-form-field  appearance="outline">
+                <mat-label>Password</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" type="passowrd" formControlName="passowrd" minlength="6" required id="passowrd">
+                <div mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </div>
+              </mat-form-field>
+              <app-alert [message]="APIerror" *ngIf="APIerror" ></app-alert>
+
+            </div>
+
+
+            <div style="margin-bottom: 4%;">
+              <button class="btn LogInInternal" [disabled]="!authForm.valid" >{{isLoginMode ? 'Login': 'Sign Up'}}</button>
+
+            </div>
+        </form>
+
+      <!-- Remind Passowrd -->
+      <div *ngIf="!isLoading">
+        <a class="underlineHover"  (click)="onSwitchMode()">{{isLoginMode ? 'I dont have an account' : 'I have an account'}}</a>
+        <br>
+        <a class="underlineHover">Forgot Password?</a>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>

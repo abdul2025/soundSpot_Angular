@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light custom-shadow ">
+  <div class="container-fluid" >
+    <a class="navbar-brand" href="/"><i class="fa fa-headphones fa-2x"></i></a>
+    <button type="button" *ngIf="isMobileMode" (click)='CloseHeader()' class="btn-close" aria-label="Close"></button>
+    <div class="collapse navbar-collapse  " [ngClass]="isMobileMode ? 'show' : ''"  id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/musicHome']" routerLinkActive="router-link-active" aria-current="page">Music</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav nav me-left mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/auth']" routerLinkActive="router-link-active" aria-current="page" *ngIf="!isAuth">Login</a>
+        </li>
+      </ul>
+    </div>
+    <nav class="navbar ">
+
+      <div class="container-fluid" >
+        <button class="navbar-toggler shop" *ngIf="!isMobileMode" (click)='dropDownHeader()' type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon" ></span>
+        </button>
+      </div>
+
+    </nav>
+  </div>
+</nav>
