@@ -8,9 +8,13 @@ import { SuccessEmailVerificationComponent } from './success-email-verification/
 const routes: Routes = [
   // {path: '', redirectTo: '', pathMatch: 'full'},
   {path: '', component: StartPageComponent},
-  {path: 'successVerify/:token', component: SuccessEmailVerificationComponent},
+  {path: 'successVerify/', component: SuccessEmailVerificationComponent},
   {path: 'musicHome', component: MusicHomeComponent},
-  {path: 'auth', component: AuthComponent},
+  {path: 'auth', component: AuthComponent, children: [
+    {
+      path:'emailverification/:token', component: AuthComponent
+    },
+  ]},
   {path: '**', component: StartPageComponent},
 
 

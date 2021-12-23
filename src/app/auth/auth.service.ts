@@ -29,26 +29,54 @@ export class AuthService {
 
 
 
-    signupFirebase(email: string, password: string){
-      return this.http.post<AuthRespData>(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firbaseAPIKEY
-      ,{
-        email: email,
-        password: password,
-        returnSecureToken: true
-      }
-      ).pipe(
-        catchError(this.fireBaseHandleError),
-        tap(resData => this.fireBaseHandleAuth(
-          resData.email,
-          resData.localId,
-          resData.idToken,
-          +resData.expiresIn, 0))
-      )
+    signupInternalDB(email: string, password: string){
+      const url = 'https://vlzmlddotg.execute-api.us-east-1.amazonaws.com/Prod/sendemails'
+      let headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+
+        'X-Api-Key': environment.awsAPIKEY});
+      let params = new HttpParams().set('email', 'abdul.2020alsh@gmail.com').set('password', '123123');
+
+      let options = { headers: headers, params: params };
+
+      return this.http.post<{body:string, statusCode: number }>(url, null, options)
+      // .pipe(
+      //   catchError(this.fireBaseHandleError),
+      //   tap(resData => this.fireBaseHandleAuth(
+      //     resData.email,
+      //     resData.localId,
+      //     resData.idToken,
+      //     +resData.expiresIn, 0))
+      // )
+      // .subscribe(res => {
+      //   console.log(res.statusCode)
+      //   if (res.statusCode==200) {
+      //     let message = JSON.parse(res.body)
+      //     this.messageFromAPI = message.messages
+      //   }
+      // }, err => {
+      //   console.log(err)
+      // })
+      // return this.http.post<AuthRespData>(
+      //   'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firbaseAPIKEY
+      // ,{
+      //   email: email,
+      //   password: password,
+      //   returnSecureToken: true
+      // }
+      // ).pipe(
+      //   catchError(this.fireBaseHandleError),
+      //   tap(resData => this.fireBaseHandleAuth(
+      //     resData.email,
+      //     resData.localId,
+      //     resData.idToken,
+      //     +resData.expiresIn, 0))
+      // )
     }
 
 
     loginFirebase(email: string, password: string) {
+      console.log(environment.firbaseAPIKEY)
       return this.http.post<AuthRespData>(
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firbaseAPIKEY
       ,{
@@ -69,18 +97,9 @@ export class AuthService {
 
     private fireBaseHandleAuth(email, localId, idToken, expiresIn, method) {
 
-      // Need to distinguish the user method login == 1 OR sign up == 0
-      if (method == 0){
-
-        // will create Lambda ----> to insert the new email
-        // Sign up, need to proccess the request and redirect to the same for the login
-            // store the user email and password with unverified on firebase
-              //
-      }
-      // Create the user
-      // New User
       const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
       const loadedUser = new User(email,localId, idToken, new Date(expirationDate))
+
     }
 
 
