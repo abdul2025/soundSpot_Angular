@@ -4,6 +4,7 @@ import { BehaviorSubject, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { User } from "./auth.user.model";
 import {environment} from "../../environments/environment"
+import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
 
 
 export interface AuthRespData{
@@ -23,10 +24,25 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
+    private socialAuthService: SocialAuthService
     // private router: Router,
     ){}
 
 
+
+    lambdaApiCreateFirebseUser(token){
+      const url = 'https://vlzmlddotg.execute-api.us-east-1.amazonaws.com/Prod/updateemailstatus'
+      let headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'X-Api-Key': environment.awsAPIKEY
+      });
+      let params = new HttpParams().set('token', token);
+
+      let options = { headers: headers, params: params };
+
+      return this.http.post<{body:string, statusCode: number }>(url, null, options)
+
+    }
 
 
     signupInternalDB(email: string, password: string){
@@ -35,43 +51,12 @@ export class AuthService {
         'Content-Type': 'application/json',
 
         'X-Api-Key': environment.awsAPIKEY});
-      let params = new HttpParams().set('email', 'abdul.2020alsh@gmail.com').set('password', '123123');
+      let params = new HttpParams().set('email', email).set('password', password);
 
       let options = { headers: headers, params: params };
 
       return this.http.post<{body:string, statusCode: number }>(url, null, options)
-      // .pipe(
-      //   catchError(this.fireBaseHandleError),
-      //   tap(resData => this.fireBaseHandleAuth(
-      //     resData.email,
-      //     resData.localId,
-      //     resData.idToken,
-      //     +resData.expiresIn, 0))
-      // )
-      // .subscribe(res => {
-      //   console.log(res.statusCode)
-      //   if (res.statusCode==200) {
-      //     let message = JSON.parse(res.body)
-      //     this.messageFromAPI = message.messages
-      //   }
-      // }, err => {
-      //   console.log(err)
-      // })
-      // return this.http.post<AuthRespData>(
-      //   'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firbaseAPIKEY
-      // ,{
-      //   email: email,
-      //   password: password,
-      //   returnSecureToken: true
-      // }
-      // ).pipe(
-      //   catchError(this.fireBaseHandleError),
-      //   tap(resData => this.fireBaseHandleAuth(
-      //     resData.email,
-      //     resData.localId,
-      //     resData.idToken,
-      //     +resData.expiresIn, 0))
-      // )
+
     }
 
 
@@ -90,15 +75,37 @@ export class AuthService {
           resData.email,
           resData.localId,
           resData.idToken,
-          +resData.expiresIn, 1))
+          +resData.expiresIn))
       )
     }
 
 
-    private fireBaseHandleAuth(email, localId, idToken, expiresIn, method) {
+
+
+  signInWithGoogle() {
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
+    return this.socialAuthService.authState.pipe(
+      catchError(this.fireBaseHandleError),
+      tap(resData => this.fireBaseHandleAuth(
+        resData.email,
+        resData.authToken,
+        resData.idToken,
+        +resData.response.expires_in))
+    )
+  }
+
+
+
+  signOut() {
+    return this.socialAuthService.signOut();
+  }
+
+
+    private fireBaseHandleAuth(email, localId, idToken, expiresIn) {
 
       const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
       const loadedUser = new User(email,localId, idToken, new Date(expirationDate))
+      localStorage.setItem('userDate', JSON.stringify(loadedUser))
 
     }
 
@@ -121,6 +128,9 @@ export class AuthService {
       }
       return throwError(errorMassage)
     }
+
+
+
 
 
 

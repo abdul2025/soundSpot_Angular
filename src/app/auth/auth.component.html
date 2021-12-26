@@ -15,19 +15,15 @@
         <br>
         <p style="font-weight: 900 ;">To continue, log in to SoundSpot <i class="fa fa-headphones"></i></p>
         <br>
-        <button class="google btn"><i class="fa fa-google fa-fw">
+        <button (click)="signInWithGoogle()" class="google btn"><i class="fa fa-google fa-fw" >
         </i> Login with Google+</button>
-        <br>
-        <button class="fb btn">
-          <i class="fa fa-facebook fa-fw"></i> Login with Facebook
-        </button>
         <br>
         <br>
         <span> ------------------------
           <span style="font-weight: 900;"> OR </span>
                  ------------------------
         </span>
-        <h4 class="messageFromLocalAPI" *ngIf="isLoginMode">{{messageFromAPI}}</h4>
+        <h4 class="messageFromLocalAPI" *ngIf="!isLoading">{{messageFromAPI}}</h4>
       </div>
 
 

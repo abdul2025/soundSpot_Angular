@@ -14,6 +14,8 @@ import { MaterialModule } from './material.module';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.comonent';
 import { AlertComponent } from './shared/alert/alert.component';
 import { SuccessEmailVerificationComponent } from './success-email-verification/success-email-verification.component';
+import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
+import {environment} from "../environments/environment"
 
 @NgModule({
   declarations: [
@@ -34,9 +36,26 @@ import { SuccessEmailVerificationComponent } from './success-email-verification/
     ReactiveFormsModule,
     BrowserAnimationsModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    SocialLoginModule
+
   ],
-  providers: [],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              environment.googleLoginClien_Id
+            )
+          },
+        ]
+      } as SocialAuthServiceConfig,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
