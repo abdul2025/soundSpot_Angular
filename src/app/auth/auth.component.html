@@ -61,7 +61,7 @@
       <div *ngIf="!isLoading">
         <a class="underlineHover"  (click)="onSwitchMode()">{{isLoginMode ? 'I dont have an account' : 'I have an account'}}</a>
         <br>
-        <a class="underlineHover">Forgot Password?</a>
+        <a class="nav-link underlineHover" [routerLink]="['resetPassowrd']" routerLinkActive="router-link-active" aria-current="page" >Forgot Password?</a>
       </div>
 
 

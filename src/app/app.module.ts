@@ -9,7 +9,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { MusicHomeComponent } from './music-home/music-home.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SuccessEmailVerificationComponent } from './success-email-verification/success-email-verification.component';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import {environment} from "../environments/environment"
 
@@ -19,7 +18,6 @@ import {environment} from "../environments/environment"
     StartPageComponent,
     HeaderComponent,
     MusicHomeComponent,
-    SuccessEmailVerificationComponent
   ],
   imports: [
     BrowserModule,

@@ -5,6 +5,7 @@ import { catchError, tap } from "rxjs/operators";
 import { User } from "./auth.user.model";
 import {environment} from "../../environments/environment"
 import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
+import { Router } from "@angular/router";
 
 
 export interface AuthRespData{
@@ -24,8 +25,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private socialAuthService: SocialAuthService
-    // private router: Router,
+    private socialAuthService: SocialAuthService,
+    private router: Router,
     ){}
 
 
@@ -79,6 +80,18 @@ export class AuthService {
       )
     }
 
+    resetPasswordFirebase(email){
+      return this.http.post<{email: string, kind: string}>(
+        'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=' + environment.firbaseAPIKEY
+      ,{
+        email: email,
+        requestType: 'PASSWORD_RESET'
+      }
+      ).pipe(
+        catchError(this.fireBaseHandleError),
+      )
+    }
+
 
 
 
@@ -95,8 +108,44 @@ export class AuthService {
   }
 
 
+  autoLogIn(){
+    const userDate : {
+        email: string,
+        id: string,
+        _token: string,
+        _tokenExpirationDate: string
+    } = JSON.parse(localStorage.getItem('userDate'))
+    if (!userDate) {
+        return;
+    }
 
-  signOut() {
+    const loadedUser = new User(userDate.email, userDate.id, userDate._token, new Date(userDate._tokenExpirationDate))
+    if (loadedUser.token) {
+        this.user.next(loadedUser)
+
+
+        const expirationDuration = new Date(userDate._tokenExpirationDate).getTime() - new Date().getTime()
+        this.autoLogout(expirationDuration)
+    }
+  }
+
+  autoLogout(expirationDuration: number){
+    console.log(expirationDuration)
+    setTimeout(() => {
+    console.log('timer logout')
+      this.LogOut()
+    }, expirationDuration);
+
+  }
+
+  LogOut(){
+    this.user.next(null)
+    localStorage.removeItem('userDate')
+    this.router.navigate(['/auth']);
+  }
+
+
+  googleSignOut() {
     return this.socialAuthService.signOut();
   }
 
@@ -104,8 +153,11 @@ export class AuthService {
     private fireBaseHandleAuth(email, localId, idToken, expiresIn) {
 
       const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+      console.log(expirationDate)
       const loadedUser = new User(email,localId, idToken, new Date(expirationDate))
+      this.user.next(loadedUser)
       localStorage.setItem('userDate', JSON.stringify(loadedUser))
+      // this.autoLogout(expirationDate)
 
     }
 

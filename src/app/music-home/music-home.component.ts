@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { pipe } from 'rxjs';
 import { SpotifyApiService } from '../services/spotify-api.service';
 
 @Component({
@@ -9,10 +8,14 @@ import { SpotifyApiService } from '../services/spotify-api.service';
 })
 export class MusicHomeComponent implements OnInit {
 
+
+
   constructor(private spotifyApiService:SpotifyApiService) { }
 
   ngOnInit(): void {
-    this.spotifyApiService.login()
+    // this.spotifyApiService.login()
+
+
   }
 
 }

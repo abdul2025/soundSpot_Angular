@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
 
 
 
@@ -11,8 +12,10 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy{
-  isAuth = false;
   isMobileMode = false;
+
+  isLogged = false
+  userSub: Subscription
 
 // this is will close the header dropdown from outside
   isFocusInsideComponent = false;
@@ -33,40 +36,30 @@ export class HeaderComponent implements OnInit, OnDestroy{
       }
       this.isFocusInsideComponent = false;
   }
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.userSub = this.authService.user.subscribe(user => {
+      if (user){
+        this.isLogged = true
+      }else {
+        this.isLogged= false
+      }
 
-
-  }
-
-  onSaveData() {
-    // console.log('safklh')
-    // this.RecipeSub = this.store.select('recipes').pipe(map(recipes => {
-    //   console.log(recipes)
-    //   return recipes.recipes
-    // })).subscribe(recipes => {
-    //   // if(recipes.length !== 0){
-    //   console.log(recipes.length)
-    //   this.store.dispatch(new RecipeActions.StoreRecipes())
-    //   // }
-    // })
+    })
 
   }
 
-  onFetchData(){
-    // this.store.dispatch(new RecipeActions.FetchRecipes())
+
+  logOut(){
+    console.log('logg out')
+    this.authService.LogOut()
   }
 
 
-
-  onLogout() {
-    // this.store.dispatch(new AuthActions.Logout())
-
-  }
 
   ngOnDestroy() {
-    // this.userSub.unsubscribe()
+    this.userSub.unsubscribe()
     // this.RecipeSub.unsubscribe()
   }
 
@@ -80,8 +73,5 @@ export class HeaderComponent implements OnInit, OnDestroy{
     this.isMobileMode = !this.isMobileMode
   }
 
-  test() {
-    console.log('aslkfjlk')
-  }
 
 }

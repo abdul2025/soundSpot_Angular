@@ -1,10 +1,8 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { AuthService, AuthRespData } from './auth.service';
-import {environment} from "../../environments/environment"
+import { Subscription } from 'rxjs';
+import { AuthService } from './auth.service';
 
 
 
@@ -34,7 +32,6 @@ export class AuthComponent implements OnInit {
 
   constructor(
       private authService: AuthService,
-      private http: HttpClient,
       private route:ActivatedRoute,
       private router: Router
     )
@@ -55,7 +52,7 @@ export class AuthComponent implements OnInit {
       this.userTokenLambdaAPI = this.route.snapshot.children[0].params.token
       this.authService.lambdaApiCreateFirebseUser(this.userTokenLambdaAPI)
       .subscribe(res => {
-        this.handleAuthLambda(res)
+        this.handleAuthLambda(res, 1)
       }, err => {
         this.messageFromAPI = err.statusText
         this.isLoading = false
@@ -80,13 +77,17 @@ export class AuthComponent implements OnInit {
 
   signInWithGoogle() {
     this.authService.signInWithGoogle().subscribe(res => {
-      this.handleAuthLambda(res)
+      this.handleAuthLambda(res, 2)
+      this.router.navigate(['/']);
     }, err => {
       this.messageFromAPI = err.statusText
       this.isLoading = false
       }
     )
   }
+
+
+
 
 
 
@@ -123,7 +124,7 @@ export class AuthComponent implements OnInit {
       }else {
         ////////// SignUP
         this.authService.signupInternalDB(email, passowrd).subscribe(res => {
-          this.handleAuthLambda(res)
+          this.handleAuthLambda(res, 1)
         }, err => {
           this.messageFromAPI = err.statusText
           this.isLoading = false
@@ -137,11 +138,17 @@ export class AuthComponent implements OnInit {
   }
 
 
-  private handleAuthLambda(res) {
-    if (res.statusCode==200) {
+  private handleAuthLambda(res, method) {
+
+    if (res.statusCode==200 && method == 1) {
       let message = JSON.parse(res.body)
       this.messageFromAPI = message.messages
       this.isLoading = false
+    } if (method==2) {
+      console.log(res)
+      this.isLoading = false
+      this.messageFromAPI = ''
+      this.router.navigate(['/']);
     }else {
       this.messageFromAPI = 'Unknown error occured'
       this.isLoading = false

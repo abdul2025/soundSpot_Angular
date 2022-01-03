@@ -10,7 +10,8 @@
       </ul>
       <ul class="navbar-nav nav me-left mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/auth']" routerLinkActive="router-link-active" aria-current="page" *ngIf="!isAuth">Login</a>
+          <a class="nav-link" [routerLink]="['/auth']" routerLinkActive="router-link-active" aria-current="page" *ngIf="!isLogged">Sign in</a>
+          <a class="nav-link" [routerLink]="['/auth']" routerLinkActive="router-link-active" (click)='logOut()' aria-current="page" *ngIf="isLogged">Sign out</a>
         </li>
       </ul>
     </div>
