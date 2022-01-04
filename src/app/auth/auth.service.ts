@@ -65,10 +65,12 @@ export class AuthService {
       console.log(environment.firbaseAPIKEY)
       return this.http.post<AuthRespData>(
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firbaseAPIKEY
+
       ,{
         email: email,
         password: password,
         returnSecureToken: true
+
       }
       ).pipe(
         catchError(this.fireBaseHandleError),
