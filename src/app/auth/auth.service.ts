@@ -127,6 +127,7 @@ export class AuthService {
 
 
         const expirationDuration = new Date(userDate._tokenExpirationDate).getTime() - new Date().getTime()
+        console.log(expirationDuration)
         this.autoLogout(expirationDuration)
     }
   }
@@ -153,13 +154,14 @@ export class AuthService {
 
 
     private fireBaseHandleAuth(email, localId, idToken, expiresIn) {
+      console.log(expiresIn)
 
       const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
       console.log(expirationDate)
       const loadedUser = new User(email,localId, idToken, new Date(expirationDate))
       this.user.next(loadedUser)
       localStorage.setItem('userDate', JSON.stringify(loadedUser))
-      // this.autoLogout(expirationDate)
+      this.autoLogout(expiresIn * 1000)
 
     }
 

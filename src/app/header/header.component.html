@@ -1,17 +1,24 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light custom-shadow ">
+<nav class="navbar navbar-expand-lg navbar-light bg-light custom-shadow " style="background-color: #000000 !important;">
   <div class="container-fluid" >
     <a class="navbar-brand" href="/"><i class="fa fa-headphones fa-2x"></i></a>
     <button type="button" *ngIf="isMobileMode" (click)='CloseHeader()' class="btn-close" aria-label="Close"></button>
     <div class="collapse navbar-collapse  " [ngClass]="isMobileMode ? 'show' : ''"  id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/musicHome']" routerLinkActive="router-link-active" aria-current="page">Music</a>
+          <a class="nav-link customLink" [routerLink]="['/musicHome']" routerLinkActive="active" aria-current="page">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link customLink" [routerLink]="['/startPage']" routerLinkActive="active" aria-current="page">startPage</a>
         </li>
       </ul>
       <ul class="navbar-nav nav me-left mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/auth']" routerLinkActive="router-link-active" aria-current="page" *ngIf="!isLogged">Sign in</a>
-          <a class="nav-link" [routerLink]="['/auth']" routerLinkActive="router-link-active" (click)='logOut()' aria-current="page" *ngIf="isLogged">Sign out</a>
+          <a class="nav-link customLink" [routerLink]="['/auth']" routerLinkActive="active" aria-current="page" *ngIf="!isLogged">Sign in</a>
+          <a class="nav-link customLogOut " [routerLink]="['/auth']" routerLinkActive="active" (click)='logOut()' aria-current="page" *ngIf="isLogged">
+            <i class="fa fa-user-circle userCustom" aria-hidden="true"></i>
+            <i class="fa fa-sign-out" aria-hidden="true"></i>
+            <!-- <i class="fa fa-chevron-circle-down dropdownCustom" aria-hidden="true"></i> -->
+            </a>
         </li>
       </ul>
     </div>

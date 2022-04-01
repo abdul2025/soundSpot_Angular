@@ -12,12 +12,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import {environment} from "../environments/environment"
 
+import { CoreModule } from './core.module';
+import { SidebarComponent } from './sidebar/sidebar.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     StartPageComponent,
     HeaderComponent,
     MusicHomeComponent,
+    SidebarComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,8 +32,12 @@ import {environment} from "../environments/environment"
     BrowserAnimationsModule,
     BrowserAnimationsModule,
     SocialLoginModule,
+    CoreModule
+
   ],
   providers: [
+
+
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

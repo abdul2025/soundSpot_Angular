@@ -108,7 +108,6 @@ export class AuthComponent implements OnInit {
     if (this.isLoginMode){
         this.authService.loginFirebase(email, passowrd).subscribe(
           resData=>{
-              console.log(resData)
               this.isLoading = false;
               this.messageFromAPI = ''
               this.router.navigate(['/']);
@@ -145,7 +144,6 @@ export class AuthComponent implements OnInit {
       this.messageFromAPI = message.messages
       this.isLoading = false
     } if (method==2) {
-      console.log(res)
       this.isLoading = false
       this.messageFromAPI = ''
       this.router.navigate(['/']);

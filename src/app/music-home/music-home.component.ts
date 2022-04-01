@@ -13,7 +13,7 @@ export class MusicHomeComponent implements OnInit {
   constructor(private spotifyApiService:SpotifyApiService) { }
 
   ngOnInit(): void {
-    // this.spotifyApiService.login()
+    this.spotifyApiService.login()
 
 
   }
